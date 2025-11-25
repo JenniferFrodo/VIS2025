@@ -1,0 +1,69 @@
+import pandas as pd
+import geopandas as gpd
+import matplotlib.pyplot as plt
+from ipywidgets import interact
+
+# --- CSV laden ---
+df = pd.read_csv("Kinos_legende.csv", sep=";")
+df = df[df["Kantone"].notna() & (df["Kantone"] != "Total")].reset_index(drop=True)
+
+years = [str(y) for y in range(2014, 2025)]
+for y in years:
+    df[y] = pd.to_numeric(df[y], errors="coerce")
+
+# Name-Mapping wie gehabt
+name_map = {
+    "Zürich": "Zürich",
+    "Bern": "Bern",
+    "Luzern": "Luzern",
+    "Uri": "Uri",
+    "Schwyz": "Schwyz",
+    "Obwalden": "Obwalden",
+    "Nidwalden": "Nidwalden",
+    "Glarus": "Glarus",
+    "Zug": "Zug",
+    "Freiburg": "Fribourg",
+    "Solothurn": "Solothurn",
+    "Basel-Stadt": "Basel-Stadt",
+    "Basel-Landschaft": "Basel-Landschaft",
+    "Schaffhausen": "Schaffhausen",
+    "Appenzell A. Rh.": "Appenzell Ausserrhoden",
+    "Appenzell I. Rh.": "Appenzell Innerrhoden",
+    "St. Gallen": "St. Gallen",
+    "Graubünden": "Graubünden",
+    "Aargau": "Aargau",
+    "Thurgau": "Thurgau",
+    "Tessin": "Ticino",
+    "Waadt": "Vaud",
+    "Wallis": "Valais",
+    "Neuenburg": "Neuchâtel",
+    "Genf": "Genève",
+    "Jura": "Jura",
+}
+df["kanton_geo"] = df["Kantone"].map(name_map)
+
+# GeoJSON laden (dein neues)
+gdf = gpd.read_file("swiss-cantons-plotly.geojson")
+
+# --- Interaktive Funktion ---
+def plot_year(year):
+    df_year = df[["kanton_geo", str(year)]].rename(columns={str(year): "Anzahl"})
+    merged = gdf.merge(df_year, left_on="name", right_on="kanton_geo")
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+
+    merged.plot(
+        column="Anzahl",
+        cmap="viridis",
+        linewidth=0.8,
+        edgecolor="black",
+        legend=True,
+        ax=ax,
+    )
+    ax.set_title(f"Anzahl Kinos pro Kanton ({year})", fontsize=14)
+    ax.axis("off")
+    plt.show()
+
+
+# --- Interaktive Steuerung ---
+interact(plot_year, year=range(2014, 2025))
