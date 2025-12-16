@@ -13,7 +13,7 @@ fig = go.Figure()
 fig.add_trace(go.Bar(
     x=Jahre,
     y=StädtischeKantone,
-    name='Städtische Kantone',
+    name='Städtische Kantone 🏙️',
     marker_color='grey'
 ))
 
@@ -21,15 +21,15 @@ fig.add_trace(go.Bar(
 fig.add_trace(go.Bar(
     x=Jahre,
     y=UrbaneKantone,
-    name='Urbane Kantone',
-    marker_color='purple'
+    name='Urbane Kantone 🏘️',
+    marker_color='tan'
 ))
 
 # Dritter Wert (z.B. Ländliche Kantone)
 fig.add_trace(go.Bar(
     x=Jahre,
     y=LändlicheKantone,
-    name='Ländliche Kantone',
+    name='Ländliche Kantone 🏡',
     marker_color='green'
 ))
 
@@ -39,8 +39,17 @@ fig.update_layout(
     barmode='group',  # Gruppiert die Balken nebeneinander
     title='Kinoanzahl nach Kantongröße',
     xaxis_title='Jahre',
-    yaxis_title='Kinoanzahl'
+    yaxis_title='Kinoanzahl',
+    yaxis=dict(
+        showgrid=True,
+        gridcolor='rgba(0,0,0,0.1)',
+        gridwidth=1
+    )
 )
+
+# Referenzlinien an y-Achsen-Kennzahlen
+for y in [50, 100, 150]:
+    fig.add_hline(y=y, line_dash="solid", line_color="black", line_width=1.5, opacity=0.1, layer="below")
 
 # Diagramm anzeigen
 fig.show()
