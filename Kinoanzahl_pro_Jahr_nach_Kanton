@@ -1,0 +1,37 @@
+import pandas as pd
+import plotly.express as px
+
+# CSV laden
+df = pd.read_csv("Kinoanzahl.csv")
+
+# Tabelle umformen: Jahre von Spalten zu Zeilen
+df_melt = df.melt(
+    id_vars="Kanton", 
+    value_vars=["2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"], 
+    var_name="Jahr", 
+    value_name="Kinoanzahl"
+)
+
+# Säulendiagramm: Jahr auf der X-Achse, Kanton als Farbe
+fig = px.bar(
+    df_melt,
+    x="Jahr",
+    y="Kinoanzahl",
+    color="Kanton",
+    barmode="group",
+    title="Kinoanzahl pro Jahr nach Kanton"
+)
+
+# Y-Achse feiner unterteilen
+fig.update_layout(
+    plot_bgcolor='white',
+    yaxis=dict(
+        tick0=0,          # Startwert
+        dtick=10,         # Schrittweite der Ticks
+        showgrid=True,     # Hilfslinien anzeigen
+        gridcolor="grey",
+        gridwidth=0.5,
+    )
+)
+
+fig.show()
