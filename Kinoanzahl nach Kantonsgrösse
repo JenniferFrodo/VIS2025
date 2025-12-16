@@ -1,0 +1,46 @@
+import plotly.graph_objects as go
+
+# Daten
+Jahre = ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024']
+StädtischeKantone = [160, 159, 162,	159, 162, 155, 152,	146, 149, 147, 143]
+UrbaneKantone = [82, 81, 81, 78, 77, 78, 76, 76, 75, 75, 75]
+LändlicheKantone = [33,	33,	35,	34,	37,	36,	35,	35,	38,	38,	37]
+
+# Erstellen des Plots mit zwei Spalten
+fig = go.Figure()
+
+# Erster Wert (z.B. Städtische Kantone)
+fig.add_trace(go.Bar(
+    x=Jahre,
+    y=StädtischeKantone,
+    name='Städtische Kantone',
+    marker_color='grey'
+))
+
+# Zweiter Wert (z.B. Urbane Kantone)
+fig.add_trace(go.Bar(
+    x=Jahre,
+    y=UrbaneKantone,
+    name='Urbane Kantone',
+    marker_color='purple'
+))
+
+# Dritter Wert (z.B. Ländliche Kantone)
+fig.add_trace(go.Bar(
+    x=Jahre,
+    y=LändlicheKantone,
+    name='Ländliche Kantone',
+    marker_color='green'
+))
+
+# Layout anpassen
+fig.update_layout(
+    plot_bgcolor='white',
+    barmode='group',  # Gruppiert die Balken nebeneinander
+    title='Kinoanzahl nach Kantongröße',
+    xaxis_title='Jahre',
+    yaxis_title='Kinoanzahl'
+)
+
+# Diagramm anzeigen
+fig.show()
