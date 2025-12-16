@@ -53,3 +53,7 @@ for y in [50, 100, 150]:
 
 # Diagramm anzeigen
 fig.show()
+
+# Als interaktive HTML-Datei speichern
+import plotly.express as px
+fig.write_html("Kinoanzahl nach Kantongröße.html")
